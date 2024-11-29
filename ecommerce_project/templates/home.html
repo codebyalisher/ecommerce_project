@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <script src="{% static 'js/login.js' %}" defer></script>
+    <title>{% block title %}My Website{% endblock %}</title>
+  </head>
+  <body>
+    <div class="container bg-blend-darken">
+      <h1>Welcome to Home</h1>
+      <!-- Navigation -->
+      {% if response %}
+      <h2>Response Details:</h2>
+      <ul>
+        {% for key, value in response.items %}
+        <li><strong>{{ key }}:</strong> {{ value }}</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p>No response data available.</p>
+      {% endif %}
+
+      <button
+      type="button"
+      id="logoutButton" 
+        class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      >
+        LogOut
+      </button>
+
+      <a href="{% url 'signup' %}" class="text-blue-500 hover:underline">
+        go to signup
+      </a>
+    </div>
+  </body>
+</html>

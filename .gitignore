@@ -1,0 +1,21 @@
+# Environment variables
+.env
+
+# Credentials
+*.credentials.json
+credentials.json
+
+# Node.js dependencies
+node_modules/
+
+# Python cache and temporary files
+__pycache__/
+*.py[cod]
+*.sqlite3
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# Docker-specific files
+*.env.docker
