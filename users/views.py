@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def form(request, action=None):  # Accept `action` as a parameter
-    if action is None:
+    if action not in ['signup', 'login', 'logout','refresh']:
         return HttpResponse("Invalid action", status=400)
 
     form_action = action  # 'signup' or 'signin'
@@ -77,30 +77,47 @@ def form(request, action=None):  # Accept `action` as a parameter
             response = redirect('login')  # Redirect to login page
             response.delete_cookie('sessionid')  # Explicitly delete the session cookie
             return response
-        return HttpResponse("Logout successful", status=200)
-        
-        if form_action=='refresh':
-            refresh_token = request.session.get('refresh_token')
+        return HttpResponse("Logout successful", status=200)        
+       
+        if action == 'refresh':
+            # Retrieve the refresh token from the cookies
+            refresh_token = request.COOKIES.get('refresh_token')
+            
+            # Check if the refresh token is present
             if not refresh_token:
                 return JsonResponse({'detail': 'No refresh token found. Please log in again.'}, status=401)
+
             # Make a request to FastAPI to refresh the access token
             response = requests.post(
                 fastapi_url,
                 json={'refresh_token': refresh_token},
                 headers={'Content-Type': 'application/json'}
             )
+
+            # Check if the response from FastAPI is successful
             if response.status_code == 200:
                 # FastAPI has issued a new access token
                 data = response.json()
                 new_access_token = data.get('access_token')
-                
-                # Update the session with the new access token
-                request.session['access_token'] = new_access_token
-                
-                return JsonResponse({'access_token': new_access_token}, status=200)
+
+                # Create a JsonResponse with the new access token
+                response = JsonResponse({'access_token': new_access_token}, status=200)
+
+                # Update the cookie with the new access token (use 'httponly' for security)
+                response.set_cookie('access_token', new_access_token, httponly=True)
+
+                # Optionally, set the expiration time for the cookie (e.g., 1 hour)
+                # response.set_cookie('access_token', new_access_token, httponly=True, max_age=3600)
+
+                return response
             else:
-                # Handle token refresh failure
+                # Handle token refresh failure (e.g., refresh token invalid)
                 return JsonResponse(response.json(), status=response.status_code)
+
+        else:
+            # Handle the case when 'action' is not 'refresh'
+            return JsonResponse({'detail': 'Invalid action specified.'}, status=400)
+
 
     return render(request, 'form.html', {'form_action': form_action,'error':error_message})
 

@@ -4,7 +4,7 @@ from decimal import Decimal
 from datetime import datetime
 
 
-
+#Roles schema
 class RoleBase(BaseModel):
     """Schema for roles."""
     name: str
@@ -12,10 +12,8 @@ class RoleBase(BaseModel):
     class Config:
         orm_mode = True
 
-
 class RoleCreate(RoleBase):
     pass
-
 
 # Validate that passwords match
     def validate_password(self):
@@ -23,6 +21,7 @@ class RoleCreate(RoleBase):
             raise ValueError("Passwords do not match")
 
 
+# User schema
 # fastapi/schemas.py
 class UserEmail(BaseModel):
     email: str
@@ -57,8 +56,29 @@ class OTPVerification(BaseModel):
     email: str  # or phone number
     otp: str
 
-# fastapi/schemas.py
 
+# Tasks schema for task_manager_api.py
+# Pydantic models
+class TaskCreate(BaseModel):
+    title: str
+    description: str
+
+class TaskUpdate(BaseModel):
+    title: str | None = None
+    description: str | None = None
+    completed: bool | None = None
+
+class TaskResponse(BaseModel):
+    id: int
+    title: str
+    description: str
+    completed: bool
+    created_at: datetime
+    updated_at: datetime
+    
+
+#product schema
+# fastapi/schemas.py
 class ProductBase(BaseModel): 
     title: str
     description: str

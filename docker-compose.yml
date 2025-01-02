@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  django:
+    build: .
+    container_name: ecommerce_django
+    volumes:
+      - .:/app
+      - static_volume:/app/static
+    env_file:
+      - .env
+    ports:
+      - "8001:8001"
+
+  fastapi:
+    build: .
+    container_name: ecommerce_fastapi
+    command: uvicorn fastapidjango.main:app --host 0.0.0.0 --port 8000
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+
+  nginx:
+    image: nginx:latest
+    container_name: ecommerce_nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - static_volume:/app/static
+    depends_on:
+      - django
+      - fastapi
+
+volumes:
+  static_volume:

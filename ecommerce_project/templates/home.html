@@ -1,39 +1,88 @@
 {% load static %}
+{% load tailwind_tags %}
+{% tailwind_preload_css %}
+{% tailwind_css %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="csrf-token" content="{{ csrf_token }}">
+    <meta name="csrf-token" content="{{ csrf_token }}" />
     <script src="{% static 'js/login.js' %}" defer></script>
     <title>{% block title %}My Website{% endblock %}</title>
   </head>
-  <body>
-    <div class="container bg-blend-darken">
-      <h1>Welcome to Home</h1>
-      <!-- Navigation -->
-      {% if response %}
-      <h2>Response Details:</h2>
-      <ul>
-        {% for key, value in response.items %}
-        <li><strong>{{ key }}:</strong> {{ value }}</li>
-        {% endfor %}
-      </ul>
-      {% else %}
-      <p>No response data available.</p>
-      {% endif %}
+<body>
+  <div class="container h-screen flex items-center justify-center">
+    <div
+      class="w-full max-w-6xl h-full bg-white rounded-lg shadow dark:border dark:bg-gray-800 dark:border-gray-700 flex flex-col justify-center"
+    >
+      <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+        <h1
+          class="text-xl font-bold text-center leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white"
+        >
+          Welcome to Home
+        </h1>
 
-      <button
-      type="button"
-      id="logoutButton" 
-        class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-      >
-        LogOut
-      </button>
+        <button
+          type="button"
+          id="logoutButton"
+          class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        >
+          LogOut
+        </button>
 
-      <a href="{% url 'signup' %}" class="text-blue-500 hover:underline">
-        go to signup
-      </a>
+        <a href="{% url 'signup' %}" class="text-blue-500 hover:underline">
+          Go to signup
+        </a>
+
+        <h3
+          class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white mb-9"
+        >
+          Third Party API data for stock and weather
+        </h3>
+        <a
+          href="{% url 'weather_view' %}"
+          class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-9"
+          >Get Weather Data</a
+        >
+        <a
+          href="{% url 'stock_view' %}"
+          class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mb-16"
+          >Get Stock Data</a
+        >
+        {% block weathercontent %}{% endblock weathercontent %}
+        {% block stockcontent %}{% endblock stockcontent %}
+
+        <h3
+          class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white mb-9"
+        >
+          Data Analysis Task
+        </h3>
+        <a
+          href="{% url 'upload_data' %}"
+          class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mb-4"
+          >Upload Data</a
+        >
+
+        {% if success_message %}
+        <p style="color: green;">{{ success_message }}</p>
+        {% endif %}
+        {% if error_message %}
+        <p style="color: red;">{{ error_message }}</p>
+        {% endif %}
+
+        <a
+          href="{% url 'view_analysis_results' %}"
+          class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mb-16"
+          >View Analysis Results</a
+        >
+        {% block uploadcontent %}{% endblock uploadcontent %}
+        {% block viewcontent %}{% endblock viewcontent %}
+      </div>
     </div>
-  </body>
+  </div>
+</body>
+
+
+
 </html>

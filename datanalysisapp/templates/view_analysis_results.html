@@ -1,0 +1,23 @@
+{% extends "home.html" %}
+{% load static %}
+{% load tailwind_tags %}
+{% tailwind_preload_css %}
+{% tailwind_css %}
+
+{% block viewcontent %}
+  <div id="analysis-results" class="p-6 space-y-4 md:space-y-6 sm:p-8">
+    <h2 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">Analysis Results</h2>
+    <button id="closeButton" class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">Close</button>
+    <ul>
+      {% for result in results %}
+        <li>{{ result.uploaded_data.file.name }}: {{ result.result }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <script>
+    document.getElementById('closeButton').addEventListener('click', function() {
+      document.getElementById('analysis-results').style.display = 'none';
+    });
+  </script>
+{% endblock viewcontent %}

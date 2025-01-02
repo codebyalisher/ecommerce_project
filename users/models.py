@@ -45,17 +45,6 @@ class Userm(AbstractBaseUser, PermissionsMixin):
         return self.email
 
 
-
-class APIKey(models.Model):
-    key = models.CharField(max_length=255, unique=True)
-    description = models.TextField(default="API key for user endpoints")
-    expires_at = models.DateTimeField(default=now)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Key: {self.key[:10]}... (Expires: {self.expires_at})"
-
-
 class OTP(models.Model):
     user = models.ForeignKey(Userm, on_delete=models.CASCADE)
     otp = models.CharField(max_length=6)
@@ -68,3 +57,11 @@ class OTP(models.Model):
     
     def __str__(self):
         return f"OTP for {self.user.username}: {self.otp}"
+    
+from datetime import datetime, timedelta
+class APIKey(models.Model):
+    key = models.CharField(max_length=255, unique=True)
+    expires_at = models.DateTimeField(default=datetime.utcnow() + timedelta(days=365))
+
+    def __str__(self):
+        return self.key

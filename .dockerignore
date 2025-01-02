@@ -1,0 +1,16 @@
+# Ignore Python cache files
+__pycache__
+*.pyc
+*.pyo
+
+# Ignore virtual environments
+venv
+env
+
+# Ignore version control directories
+.git
+.gitignore
+
+# Ignore other unnecessary files
+node_modules
+*.log

@@ -21,8 +21,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("users/", include('users.urls')),    
-    # path('skills/',include('skills.urls'))
+    path("users/", include('users.urls')),
+    path('datanalysis/', include('datanalysisapp.urls')),
+    path('thirdpartyapi/', include('thirdpartyapiapp.urls')),
+    path('',include('users.urls')) #this is being set as  the default page after laoding the application on the browser
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

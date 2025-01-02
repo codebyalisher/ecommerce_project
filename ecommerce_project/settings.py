@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'fastapidjango',
+    'datanalysisapp',
+    'thirdpartyapiapp',
     'orders',
     'products',
     'users', 
@@ -104,6 +106,8 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+LOGIN_URL = '/login/'
 
 AUTH_USER_MODEL = 'users.Userm'
 # Password validation
